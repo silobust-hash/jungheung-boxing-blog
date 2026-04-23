@@ -3,7 +3,9 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('JUNGHEUNG_THEME_VERSION', '1.1.0');
+define('JUNGHEUNG_THEME_VERSION', '1.2.0');
+
+require get_template_directory() . '/inc/site-info.php';
 
 function jungheung_theme_setup() {
     load_theme_textdomain('jungheung', get_template_directory() . '/languages');

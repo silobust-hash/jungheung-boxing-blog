@@ -1,4 +1,4 @@
-# 정흥복싱 블로그 (jungheung-boxing-blog)
+# 중흥복싱클럽 블로그 (jungheung-boxing-blog)
 
 맥미니 + Docker + Cloudflare Tunnel 로 운영하는 WordPress 블로그.
 `blog.광주복싱.com` 에서 접속되며, 본 홈페이지 `www.광주복싱.com` (가비아 웹호스팅) 과는 분리된 서브도메인입니다.
@@ -127,7 +127,19 @@ docker compose logs -f # Ctrl+C 로 빠져나오기
 1. 브라우저에서 **https://blog.광주복싱.com** 접속
 2. 언어 → 한국어 선택
 3. 사이트 제목 / 관리자 계정 / 비밀번호 / 이메일 입력 → **워드프레스 설치**
-4. 로그인 후 **외모 → 테마** → `Jungheung Theme` 활성화
+4. 로그인 후 **외모 → 테마** → `Jungheung Boxing Theme` 활성화
+
+### 4-2. 샘플 콘텐츠 시드 (선택)
+체육관 소개 / 프로그램 / 오시는 길 / 문의 페이지와 카테고리 · 주 메뉴를 실제 정보 (062-521-9848 등) 로 한 번에 생성합니다.
+
+```bash
+./scripts/seed.sh
+```
+멱등하므로 여러 번 실행해도 기존 글은 덮지 않습니다. 다시 돌리고 싶으면:
+```bash
+docker compose run --rm cli wp --allow-root option delete jungheung_seeded
+./scripts/seed.sh
+```
 
 ---
 
@@ -195,7 +207,40 @@ crontab -e
 
 ---
 
-## 7. 문제 해결
+## 7. 자동 배포 (git pull 기반)
+
+맥미니는 공인 IP 없이 Cloudflare Tunnel 로만 외부에 노출돼 있어 GitHub Actions 에서 SSH 푸시는 못 합니다. 대신 **맥미니에서 주기적으로 `git pull`** 하는 방식을 씁니다.
+
+### 수동 배포
+```bash
+./scripts/deploy.sh
+```
+동작:
+1. `git fetch && git merge --ff-only` 로 현재 브랜치 최신화
+2. 변경 파일을 분석하여 필요한 컨테이너만 재시작
+   - `docker-compose.yml` 바뀜 → `docker compose up -d`
+   - `mu-plugins/` 바뀜 → `docker compose restart wordpress`
+   - 테마 파일만 바뀜 → 재시작 없이 즉시 반영 (볼륨 마운트)
+
+### 자동 배포 (5분마다 체크)
+```bash
+crontab -e
+```
+추가:
+```
+*/5 * * * * cd $HOME/jungheung-boxing-blog && ./scripts/deploy.sh >> logs/deploy.log 2>&1
+```
+
+GitHub 에 push 하면 최대 5분 내 맥미니에 반영됩니다.
+
+### 브랜치 전환 배포
+```bash
+./scripts/deploy.sh main   # main 브랜치로 전환 후 pull
+```
+
+---
+
+## 8. 문제 해결
 
 ### "Error establishing a database connection"
 ```bash
@@ -226,21 +271,44 @@ docker compose exec wordpress grep WP_HOME /var/www/html/wp-config.php
 
 ---
 
-## 8. 디렉터리 구조
+## 9. 디렉터리 구조
 
 ```
 .
-├── docker-compose.yml       # db + wordpress + cloudflared
+├── docker-compose.yml       # db + wordpress + cloudflared + cli (profile)
 ├── .env                     # 비밀값 (git 제외)
 ├── .env.example             # 템플릿
 ├── .gitignore
 ├── README.md                # 이 문서
 ├── scripts/
 │   ├── backup.sh            # DB + wp-content 백업
-│   └── restore.sh           # 복구
+│   ├── restore.sh           # 복구
+│   ├── deploy.sh            # git pull + 스마트 재시작
+│   ├── seed.sh              # 샘플 콘텐츠 시드 (wrapper)
+│   └── seed.php             # WP-CLI eval-file 대상
 └── wp-content/
+    ├── mu-plugins/
+    │   └── jungheung-defaults.php  # 시간대·고유주소·보안 (git 추적)
     ├── themes/
-    │   └── jungheung-theme/ # 커스텀 테마 (git 추적)
+    │   └── jungheung-theme/        # 커스텀 테마 (git 추적)
+    │       └── inc/site-info.php   # 체육관 정보 상수 (전화/주소 등)
     ├── plugins/             # 런타임 설치물 (git 제외)
     └── uploads/             # 미디어 업로드 (git 제외)
+```
+
+---
+
+## 10. 체육관 정보 수정하기
+
+테마 여러 곳에 노출되는 전화번호·주소·운영시간은 한 파일에 모여 있습니다:
+```
+wp-content/themes/jungheung-theme/inc/site-info.php
+```
+상수 값만 바꾸고 저장하면 헤더/푸터/히어로에 즉시 반영됩니다 (재시작 불필요).
+
+```php
+define('JUNGHEUNG_PHONE',   '062-521-9848');
+define('JUNGHEUNG_ADDRESS', '광주광역시 북구 서방로 34, 3층');
+define('JUNGHEUNG_HOURS',   '오후 4:30 ~ 10:00');
+// ...
 ```

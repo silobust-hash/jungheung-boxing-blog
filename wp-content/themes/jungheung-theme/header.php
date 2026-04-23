@@ -23,7 +23,10 @@
                     <?php elseif (file_exists($logo_path)) : ?>
                         <img src="<?php echo esc_url($logo_url); ?>" alt="<?php bloginfo('name'); ?>" class="character-logo">
                     <?php endif; ?>
-                    <span class="site-title-text"><?php bloginfo('name'); ?></span>
+                    <span class="site-title-group">
+                        <span class="site-title-text"><?php bloginfo('name'); ?></span>
+                        <span class="site-title-sub"><?php echo esc_html(JUNGHEUNG_EN_NAME); ?> · BLOG</span>
+                    </span>
                 </a>
             </div>
 
@@ -40,11 +43,20 @@
                 } else {
                     echo '<ul class="menu-primary">';
                     printf('<li><a href="%s">홈</a></li>', esc_url(home_url('/')));
-                    printf('<li><a href="%s">🥊 중흥복싱클럽</a></li>', esc_url(get_post_type_archive_link('boxing')));
+                    printf('<li><a href="%s">🥊 중흥복싱</a></li>', esc_url(get_post_type_archive_link('boxing')));
                     printf('<li><a href="%s">📋 손해사정</a></li>', esc_url(get_post_type_archive_link('adjuster')));
+                    printf('<li class="menu-external"><a href="%s" rel="noopener">%s</a></li>',
+                        esc_url(JUNGHEUNG_MAIN_SITE),
+                        esc_html(JUNGHEUNG_MAIN_SITE_LABEL)
+                    );
                     echo '</ul>';
                 }
                 ?>
             </nav>
+
+            <a class="header-phone" href="tel:<?php echo esc_attr(JUNGHEUNG_PHONE_TEL); ?>" aria-label="전화 문의">
+                <span class="phone-icon">📞</span>
+                <span class="phone-number"><?php echo esc_html(JUNGHEUNG_PHONE); ?></span>
+            </a>
         </div>
     </header>

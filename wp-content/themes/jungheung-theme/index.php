@@ -36,9 +36,19 @@
         ));
         ?>
     <?php else : ?>
-        <section class="hero">
-            <h2><?php echo esc_html(get_bloginfo('name')); ?></h2>
-            <p><?php echo esc_html(get_bloginfo('description')); ?></p>
+        <section class="hero hero-jungheung">
+            <span class="hero-eyebrow">JUNGHEUNG BOXING CLUB · BLOG</span>
+            <h2 class="hero-title">&ldquo;<?php echo esc_html(JUNGHEUNG_TAGLINE); ?>&rdquo;</h2>
+            <p class="hero-sub"><?php echo esc_html(JUNGHEUNG_SUBTAGLINE); ?></p>
+            <p class="hero-cta">
+                <a class="btn-phone" href="tel:<?php echo esc_attr(JUNGHEUNG_PHONE_TEL); ?>">
+                    📞 <?php echo esc_html(JUNGHEUNG_PHONE); ?> · 전화 문의
+                </a>
+                <a class="btn-ghost" href="<?php echo esc_url(JUNGHEUNG_MAIN_SITE); ?>" rel="noopener">
+                    <?php echo esc_html(JUNGHEUNG_MAIN_SITE_LABEL); ?>
+                </a>
+            </p>
+            <p class="hero-stars">★ 정통 복싱 ★ 복싱 다이어트 ★ 학생반 ★ 직장인반 ★</p>
         </section>
 
         <div class="split-section">
