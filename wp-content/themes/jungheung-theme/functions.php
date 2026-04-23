@@ -117,3 +117,20 @@ function jungheung_body_classes($classes) {
     return $classes;
 }
 add_filter('body_class', 'jungheung_body_classes');
+
+// 검색엔진 소유권 확인용 메타태그 (값이 있을 때만 출력)
+function jungheung_search_console_meta() {
+    if (defined('JUNGHEUNG_GSC_VERIFICATION') && JUNGHEUNG_GSC_VERIFICATION !== '') {
+        printf(
+            '<meta name="google-site-verification" content="%s">' . "\n",
+            esc_attr(JUNGHEUNG_GSC_VERIFICATION)
+        );
+    }
+    if (defined('JUNGHEUNG_NAVER_VERIFICATION') && JUNGHEUNG_NAVER_VERIFICATION !== '') {
+        printf(
+            '<meta name="naver-site-verification" content="%s">' . "\n",
+            esc_attr(JUNGHEUNG_NAVER_VERIFICATION)
+        );
+    }
+}
+add_action('wp_head', 'jungheung_search_console_meta', 1);
