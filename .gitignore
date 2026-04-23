@@ -1,0 +1,26 @@
+# 환경 변수 / 비밀값
+.env
+.env.local
+.env.*.local
+
+# 백업 산출물
+backups/
+*.sql
+*.sql.gz
+*.tar.gz
+
+# WordPress 가 런타임에 생성/설치하는 디렉터리
+# (DB, 업로드, 플러그인은 git 이 아니라 백업 스크립트로 관리합니다)
+wp-content/uploads/
+wp-content/plugins/
+wp-content/upgrade/
+wp-content/cache/
+wp-content/languages/
+
+# macOS
+.DS_Store
+
+# 에디터
+.idea/
+.vscode/
+*.swp
