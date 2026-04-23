@@ -5,18 +5,14 @@
         <article <?php post_class('post-single'); ?>>
             <header class="post-header">
                 <?php
-                $terms = get_the_category();
-                if (empty($terms)) {
-                    $post_type = get_post_type();
-                    if ($post_type === 'boxing') {
-                        echo '<span class="post-cat cat-boxing">🥊 중흥복싱클럽</span>';
-                    } elseif ($post_type === 'adjuster') {
-                        echo '<span class="post-cat cat-adjuster">📋 손해사정</span>';
-                    }
-                } else {
-                    foreach ($terms as $t) {
-                        printf('<a class="post-cat" href="%s">%s</a>', esc_url(get_category_link($t)), esc_html($t->name));
-                    }
+                foreach (get_the_category() as $t) {
+                    $extra = $t->slug === 'adjuster' ? ' cat-adjuster' : '';
+                    printf(
+                        '<a class="post-cat%s" href="%s">%s</a>',
+                        esc_attr($extra),
+                        esc_url(get_category_link($t)),
+                        esc_html($t->name)
+                    );
                 }
                 ?>
                 <h1 class="post-title"><?php the_title(); ?></h1>

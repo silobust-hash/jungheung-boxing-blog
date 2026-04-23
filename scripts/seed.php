@@ -12,7 +12,7 @@ if (!defined('WP_CLI') || !WP_CLI) {
     exit(1);
 }
 
-$SEED_VERSION = '1.1.0';
+$SEED_VERSION = '1.2.0';
 $installed = get_option('jungheung_seeded', '0');
 if ($installed === $SEED_VERSION) {
     WP_CLI::success("이미 시딩되어 있습니다 (version $installed). 재실행하려면 'wp option delete jungheung_seeded' 후 다시 실행.");
@@ -245,8 +245,10 @@ if (!empty($page_ids['about'])) {
 if (!empty($page_ids['programs'])) {
     jungheung_ensure_menu_item($menu_id, '프로그램', 'post_type', $page_ids['programs'], array('menu-item-object' => 'page'));
 }
-jungheung_ensure_menu_item($menu_id, '🥊 중흥복싱', 'post_type_archive', 'boxing', array('menu-item-object' => 'boxing'));
-jungheung_ensure_menu_item($menu_id, '📋 손해사정', 'post_type_archive', 'adjuster', array('menu-item-object' => 'adjuster'));
+$adjuster_cat = get_term_by('slug', 'adjuster', 'category');
+if ($adjuster_cat) {
+    jungheung_ensure_menu_item($menu_id, '📋 손해사정', 'taxonomy', $adjuster_cat->term_id, array('menu-item-object' => 'category'));
+}
 if (!empty($page_ids['location'])) {
     jungheung_ensure_menu_item($menu_id, '오시는 길', 'post_type', $page_ids['location'], array('menu-item-object' => 'page'));
 }
@@ -282,14 +284,18 @@ $welcome_content = '<!-- wp:paragraph -->
 <p>체육관 방문·체험·상담은 <a href="tel:+82625219848">' . GYM_PHONE . '</a>로 전화 주세요.</p>
 <!-- /wp:paragraph -->';
 
-if (!get_page_by_path('welcome', OBJECT, 'boxing')) {
-    wp_insert_post(array(
+$notice_cat = get_term_by('slug', 'notice', 'category');
+if (!get_page_by_path('welcome', OBJECT, 'post')) {
+    $welcome_id = wp_insert_post(array(
         'post_title'   => '중흥복싱클럽 블로그를 오픈했습니다',
         'post_name'    => 'welcome',
-        'post_type'    => 'boxing',
+        'post_type'    => 'post',
         'post_status'  => 'publish',
         'post_content' => $welcome_content,
     ));
+    if ($notice_cat && $welcome_id) {
+        wp_set_post_categories($welcome_id, array((int) $notice_cat->term_id));
+    }
     WP_CLI::log("  + 샘플 글: 중흥복싱클럽 블로그를 오픈했습니다");
 }
 

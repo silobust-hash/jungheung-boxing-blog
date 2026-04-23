@@ -62,13 +62,19 @@
             <?php endif; ?>
         </section>
 
+        <?php
+        $adjuster_term = get_term_by('slug', 'adjuster', 'category');
+        $adjuster_id   = $adjuster_term ? (int) $adjuster_term->term_id : 0;
+        ?>
         <div class="split-section">
             <section class="category-card boxing">
                 <h3>🥊 중흥복싱클럽 이야기</h3>
                 <?php
                 $boxing_query = new WP_Query(array(
-                    'post_type'      => 'boxing',
-                    'posts_per_page' => 5,
+                    'post_type'           => 'post',
+                    'posts_per_page'      => 5,
+                    'category__not_in'    => $adjuster_id ? array($adjuster_id) : array(),
+                    'ignore_sticky_posts' => true,
                 ));
                 if ($boxing_query->have_posts()) :
                     while ($boxing_query->have_posts()) : $boxing_query->the_post(); ?>
@@ -78,12 +84,8 @@
                         </div>
                     <?php endwhile;
                     wp_reset_postdata();
-                    $archive = get_post_type_archive_link('boxing');
-                    if ($archive) :
-                        printf('<a class="card-more" href="%s">더 보기 →</a>', esc_url($archive));
-                    endif;
                 else :
-                    echo '<p class="no-posts">아직 등록된 게시글이 없습니다.</p>';
+                    echo '<p class="no-posts">아직 등록된 글이 없습니다.</p>';
                 endif;
                 ?>
             </section>
@@ -91,58 +93,31 @@
             <section class="category-card adjuster">
                 <h3>📋 손해사정사 업무</h3>
                 <?php
-                $adjuster_query = new WP_Query(array(
-                    'post_type'      => 'adjuster',
-                    'posts_per_page' => 5,
-                ));
-                if ($adjuster_query->have_posts()) :
-                    while ($adjuster_query->have_posts()) : $adjuster_query->the_post(); ?>
-                        <div class="post-item">
-                            <a href="<?php the_permalink(); ?>"><?php the_title(); ?></a>
-                            <div class="post-meta"><?php echo esc_html(get_the_date()); ?></div>
-                        </div>
-                    <?php endwhile;
-                    wp_reset_postdata();
-                    $archive = get_post_type_archive_link('adjuster');
-                    if ($archive) :
-                        printf('<a class="card-more" href="%s">더 보기 →</a>', esc_url($archive));
+                if ($adjuster_id) :
+                    $adjuster_query = new WP_Query(array(
+                        'post_type'           => 'post',
+                        'posts_per_page'      => 5,
+                        'cat'                 => $adjuster_id,
+                        'ignore_sticky_posts' => true,
+                    ));
+                    if ($adjuster_query->have_posts()) :
+                        while ($adjuster_query->have_posts()) : $adjuster_query->the_post(); ?>
+                            <div class="post-item">
+                                <a href="<?php the_permalink(); ?>"><?php the_title(); ?></a>
+                                <div class="post-meta"><?php echo esc_html(get_the_date()); ?></div>
+                            </div>
+                        <?php endwhile;
+                        wp_reset_postdata();
+                        printf('<a class="card-more" href="%s">더 보기 →</a>', esc_url(get_category_link($adjuster_id)));
+                    else :
+                        echo '<p class="no-posts">아직 등록된 글이 없습니다.</p>';
                     endif;
                 else :
-                    echo '<p class="no-posts">아직 등록된 게시글이 없습니다.</p>';
+                    echo '<p class="no-posts">카테고리가 준비되지 않았습니다. <code>./scripts/seed.sh</code> 실행 후 다시 확인하세요.</p>';
                 endif;
                 ?>
             </section>
         </div>
-
-        <?php
-        $recent = new WP_Query(array(
-            'post_type'      => 'post',
-            'posts_per_page' => 6,
-            'ignore_sticky_posts' => true,
-        ));
-        if ($recent->have_posts()) : ?>
-            <section class="recent-section">
-                <h3 class="section-title">최근 블로그 글</h3>
-                <div class="post-list post-list-grid">
-                    <?php while ($recent->have_posts()) : $recent->the_post(); ?>
-                        <article <?php post_class('post-card'); ?>>
-                            <?php if (has_post_thumbnail()) : ?>
-                                <a class="post-card-thumb" href="<?php the_permalink(); ?>">
-                                    <?php the_post_thumbnail('jungheung-card'); ?>
-                                </a>
-                            <?php endif; ?>
-                            <div class="post-card-body">
-                                <h4 class="post-card-title">
-                                    <a href="<?php the_permalink(); ?>"><?php the_title(); ?></a>
-                                </h4>
-                                <div class="post-meta"><?php echo esc_html(get_the_date()); ?></div>
-                            </div>
-                        </article>
-                    <?php endwhile; ?>
-                </div>
-            </section>
-            <?php wp_reset_postdata(); ?>
-        <?php endif; ?>
     <?php endif; ?>
 </main>
 

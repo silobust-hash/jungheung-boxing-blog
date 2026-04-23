@@ -53,8 +53,10 @@
                 } else {
                     echo '<ul class="menu-primary">';
                     printf('<li><a href="%s">홈</a></li>', esc_url(home_url('/')));
-                    printf('<li><a href="%s">🥊 중흥복싱</a></li>', esc_url(get_post_type_archive_link('boxing')));
-                    printf('<li><a href="%s">📋 손해사정</a></li>', esc_url(get_post_type_archive_link('adjuster')));
+                    $adjuster_term = get_term_by('slug', 'adjuster', 'category');
+                    if ($adjuster_term) {
+                        printf('<li><a href="%s">📋 손해사정</a></li>', esc_url(get_category_link($adjuster_term)));
+                    }
                     printf('<li class="menu-external"><a href="%s" rel="noopener">%s</a></li>',
                         esc_url(JUNGHEUNG_MAIN_SITE),
                         esc_html(JUNGHEUNG_MAIN_SITE_LABEL)

@@ -46,6 +46,39 @@ add_action('init', function () {
     update_option('jungheung_defaults_version', $target);
 });
 
+// 레거시 CPT (boxing/adjuster) → 일반 post + 카테고리 일괄 이관 (한 번만)
+// boxing CPT 글  → '공지사항' 카테고리
+// adjuster CPT 글 → '손해사정' 카테고리
+add_action('init', function () {
+    if (get_option('jungheung_cpt_migrated') === '1') {
+        return;
+    }
+    global $wpdb;
+
+    $map = array(
+        'boxing'   => 'notice',
+        'adjuster' => 'adjuster',
+    );
+
+    foreach ($map as $old_type => $cat_slug) {
+        $cat = get_term_by('slug', $cat_slug, 'category');
+        $ids = $wpdb->get_col($wpdb->prepare(
+            "SELECT ID FROM {$wpdb->posts} WHERE post_type = %s",
+            $old_type
+        ));
+        foreach ($ids as $id) {
+            $wpdb->update($wpdb->posts, array('post_type' => 'post'), array('ID' => (int) $id));
+            clean_post_cache((int) $id);
+            if ($cat) {
+                wp_set_post_categories((int) $id, array((int) $cat->term_id), false);
+            }
+        }
+    }
+
+    update_option('jungheung_cpt_migrated', '1');
+    flush_rewrite_rules(false);
+}, 20);
+
 // XML-RPC 비활성화 (로그인 무차별 대입 공격 경로 차단)
 add_filter('xmlrpc_enabled', '__return_false');
 add_filter('wp_headers', function ($headers) {

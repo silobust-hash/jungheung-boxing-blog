@@ -4,9 +4,7 @@
     <header class="archive-header">
         <h1 class="archive-title">
             <?php
-            if (is_post_type_archive('boxing')) {
-                echo '🥊 중흥복싱클럽 이야기';
-            } elseif (is_post_type_archive('adjuster')) {
+            if (is_category('adjuster')) {
                 echo '📋 손해사정사 업무';
             } else {
                 the_archive_title();
