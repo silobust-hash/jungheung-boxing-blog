@@ -25,7 +25,7 @@ WP_CLI::log("▶ 중흥복싱클럽 시드 시작 (version $SEED_VERSION)");
 define('GYM_PHONE',   '062-521-9848');
 define('GYM_ADDRESS', '광주광역시 북구 서방로 34, 3층');
 define('GYM_HOURS',   '오후 4:30 ~ 10:00');
-define('GYM_MAIN',    'https://www.xn--oy2b35ckwh3a.com/');
+define('GYM_MAIN',    'https://xn--oy2b35ckwh3a.com/');
 
 // ───────────────────────────────────────────────────────
 // 1. 기본 샘플 콘텐츠 제거

@@ -17,6 +17,6 @@ define('JUNGHEUNG_TAGLINE',        '주먹은 거짓말을 하지 않는다');
 define('JUNGHEUNG_SUBTAGLINE',     '정통 복싱 · 복싱 다이어트 · 안전한 실전 스파링');
 define('JUNGHEUNG_HEAD_COACH',     '홍관장');
 define('JUNGHEUNG_EN_NAME',        'JUNGHEUNG BOXING CLUB');
-define('JUNGHEUNG_MAIN_SITE',      'https://www.xn--oy2b35ckwh3a.com/');
+define('JUNGHEUNG_MAIN_SITE',      'https://xn--oy2b35ckwh3a.com/');
 define('JUNGHEUNG_MAIN_SITE_LABEL', '체육관 홈 ↗');
 define('JUNGHEUNG_NAVER_MAP',      'https://map.naver.com/p/search/%EC%A4%91%ED%9D%A5%EB%B3%B5%EC%8B%B1%ED%81%B4%EB%9F%BD');
