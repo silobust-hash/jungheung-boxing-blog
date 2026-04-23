@@ -45,15 +45,15 @@ RESTART_WP=0
 
 while IFS= read -r f; do
     case "$f" in
-        docker-compose.yml|.env.example)
+        docker-compose.yml)
             RESTART_ALL=1 ;;
         wp-content/mu-plugins/*)
             RESTART_WP=1 ;;
         wp-content/themes/*)
             # 테마 파일은 볼륨 마운트로 즉시 반영됨. 재시작 불필요.
             ;;
-        scripts/*|*.md|.gitignore)
-            # 스크립트/문서 변경은 재시작 불필요.
+        scripts/*|*.md|.gitignore|.env.example|wp-content/themes/jungheung-theme/assets/images/README.md)
+            # 문서/템플릿/스크립트 — 런타임에 영향 없음, 재시작 불필요.
             ;;
         *)
             RESTART_WP=1 ;;
