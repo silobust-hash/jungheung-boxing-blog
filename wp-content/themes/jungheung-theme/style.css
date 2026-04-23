@@ -1,0 +1,161 @@
+/*
+Theme Name: Jungheung Boxing Theme
+Theme URI: https://github.com/silobust-hash/jungheung-boxing-blog
+Author: Antigravity
+Author URI: https://github.com/silobust-hash
+Description: A premium WordPress theme for Jungheung Boxing Club featuring a dedicated character, with distinctive sections for Boxing and Damage Claims Adjuster.
+Version: 1.0.0
+Text Domain: jungheung
+*/
+
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;700;900&family=Outfit:wght@400;700;900&display=swap');
+
+:root {
+  --primary: #1e3a8a; /* deep blue */
+  --secondary: #dc2626; /* boxing red */
+  --bg-color: #f8fafc;
+  --card-bg: #ffffff;
+  --text-main: #0f172a;
+  --text-muted: #475569;
+  --font-base: 'Noto Sans KR', sans-serif;
+  --font-heading: 'Outfit', 'Noto Sans KR', sans-serif;
+}
+
+body {
+  font-family: var(--font-base);
+  background: var(--bg-color);
+  color: var(--text-main);
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+}
+
+header {
+  background: var(--card-bg);
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+  padding: 1rem 2rem;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.character-logo {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid var(--primary);
+  box-shadow: 0 0 10px rgba(30, 58, 138, 0.2);
+}
+
+header h1 {
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
+  font-weight: 900;
+  margin: 0;
+  color: var(--primary);
+  letter-spacing: -0.025em;
+}
+
+main {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+.hero {
+  text-align: center;
+  padding: 4rem 1rem;
+  background: linear-gradient(135deg, var(--primary) 0%, #1e40af 100%);
+  color: white;
+  border-radius: 1rem;
+  margin-bottom: 3rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero h2 {
+  font-family: var(--font-heading);
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.hero p {
+  font-size: 1.25rem;
+  opacity: 0.9;
+}
+
+.split-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+.category-card {
+  background: var(--card-bg);
+  border-radius: 1rem;
+  padding: 2rem;
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.category-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+}
+
+.category-card h3 {
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
+  margin-top: 0;
+  border-bottom: 2px solid var(--primary);
+  padding-bottom: 0.5rem;
+}
+
+.category-card.adjuster h3 {
+  border-bottom-color: var(--secondary);
+}
+
+.post-item {
+  margin-bottom: 1.5rem;
+}
+
+.post-item a {
+  text-decoration: none;
+  color: var(--text-main);
+  font-weight: 700;
+  transition: color 0.2s;
+}
+
+.post-item a:hover {
+  color: var(--primary);
+}
+
+.post-meta {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  margin-top: 0.25rem;
+}
+
+footer {
+  text-align: center;
+  padding: 2rem;
+  background: var(--text-main);
+  color: white;
+  margin-top: 4rem;
+}
+
+@media (max-width: 768px) {
+  .split-section {
+    grid-template-columns: 1fr;
+  }
+}
