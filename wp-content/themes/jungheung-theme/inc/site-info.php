@@ -20,3 +20,9 @@ define('JUNGHEUNG_EN_NAME',        'JUNGHEUNG BOXING CLUB');
 define('JUNGHEUNG_MAIN_SITE',      'https://xn--hc0bj51alpe00g.com/');
 define('JUNGHEUNG_MAIN_SITE_LABEL', '체육관 홈 ↗');
 define('JUNGHEUNG_NAVER_MAP',      'https://map.naver.com/p/search/%EC%A4%91%ED%9D%A5%EB%B3%B5%EC%8B%B1%ED%81%B4%EB%9F%BD');
+
+// ─── 검색엔진 검증 코드 (필요 시 값 채우기) ──────────────────────
+// Google Search Console (HTML 태그 방식): <meta name="google-site-verification" content="XXX"> 의 content 값
+define('JUNGHEUNG_GSC_VERIFICATION', '');
+// 네이버 웹마스터: <meta name="naver-site-verification" content="XXX"> 의 content 값
+define('JUNGHEUNG_NAVER_VERIFICATION', '');

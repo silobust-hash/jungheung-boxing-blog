@@ -70,6 +70,24 @@ add_filter('rest_endpoints', function ($endpoints) {
     return $endpoints;
 });
 
+// 사이트맵에서 사용자(작성자) 목록 제거 — 개인정보 보호.
+// 글/페이지/CPT 사이트맵은 그대로 유지.
+add_filter('wp_sitemaps_add_provider', function ($provider, $name) {
+    if ($name === 'users') {
+        return false;
+    }
+    return $provider;
+}, 10, 2);
+
+// robots.txt 에 사이트맵 URL 명시 (검색엔진 자동 발견용)
+add_filter('robots_txt', function ($output, $public) {
+    if ((int) $public === 1) {
+        $sitemap_url = home_url('/wp-sitemap.xml');
+        $output .= "\nSitemap: $sitemap_url\n";
+    }
+    return $output;
+}, 10, 2);
+
 // author=숫자 로 사용자명 탐색하는 열거 차단
 add_action('template_redirect', function () {
     if (!is_admin() && isset($_GET['author']) && is_numeric($_GET['author'])) {
