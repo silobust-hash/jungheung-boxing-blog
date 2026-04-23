@@ -45,39 +45,6 @@ function jungheung_enqueue_styles() {
 }
 add_action('wp_enqueue_scripts', 'jungheung_enqueue_styles');
 
-function jungheung_register_cpt() {
-    register_post_type('boxing', array(
-        'labels' => array(
-            'name'          => '복싱 이야기',
-            'singular_name' => '복싱',
-            'add_new_item'  => '새 복싱 글 작성',
-            'edit_item'     => '복싱 글 편집',
-        ),
-        'public'       => true,
-        'has_archive'  => true,
-        'rewrite'      => array('slug' => 'boxing'),
-        'supports'     => array('title', 'editor', 'thumbnail', 'excerpt', 'comments'),
-        'menu_icon'    => 'dashicons-groups',
-        'show_in_rest' => true,
-    ));
-
-    register_post_type('adjuster', array(
-        'labels' => array(
-            'name'          => '손해사정사 업무',
-            'singular_name' => '손해사정',
-            'add_new_item'  => '새 손해사정 글 작성',
-            'edit_item'     => '손해사정 글 편집',
-        ),
-        'public'       => true,
-        'has_archive'  => true,
-        'rewrite'      => array('slug' => 'adjuster'),
-        'supports'     => array('title', 'editor', 'thumbnail', 'excerpt', 'comments'),
-        'menu_icon'    => 'dashicons-clipboard',
-        'show_in_rest' => true,
-    ));
-}
-add_action('init', 'jungheung_register_cpt');
-
 function jungheung_widgets_init() {
     register_sidebar(array(
         'name'          => __('사이드바', 'jungheung'),
