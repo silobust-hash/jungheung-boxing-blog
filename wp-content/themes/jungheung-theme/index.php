@@ -35,20 +35,31 @@
             'next_text' => '다음 →',
         ));
         ?>
+    <?php
+        $character_path = get_template_directory() . '/assets/images/character.png';
+        $character_url  = get_template_directory_uri() . '/assets/images/character.png';
+    ?>
     <?php else : ?>
         <section class="hero hero-jungheung">
-            <span class="hero-eyebrow">JUNGHEUNG BOXING CLUB · BLOG</span>
-            <h2 class="hero-title">&ldquo;<?php echo esc_html(JUNGHEUNG_TAGLINE); ?>&rdquo;</h2>
-            <p class="hero-sub"><?php echo esc_html(JUNGHEUNG_SUBTAGLINE); ?></p>
-            <p class="hero-cta">
-                <a class="btn-phone" href="tel:<?php echo esc_attr(JUNGHEUNG_PHONE_TEL); ?>">
-                    📞 <?php echo esc_html(JUNGHEUNG_PHONE); ?> · 전화 문의
-                </a>
-                <a class="btn-ghost" href="<?php echo esc_url(JUNGHEUNG_MAIN_SITE); ?>" rel="noopener">
-                    <?php echo esc_html(JUNGHEUNG_MAIN_SITE_LABEL); ?>
-                </a>
-            </p>
-            <p class="hero-stars">★ 정통 복싱 ★ 복싱 다이어트 ★ 학생반 ★ 직장인반 ★</p>
+            <div class="hero-body">
+                <span class="hero-eyebrow">JUNGHEUNG BOXING CLUB · BLOG</span>
+                <h2 class="hero-title">&ldquo;<?php echo esc_html(JUNGHEUNG_TAGLINE); ?>&rdquo;</h2>
+                <p class="hero-sub"><?php echo esc_html(JUNGHEUNG_SUBTAGLINE); ?></p>
+                <p class="hero-cta">
+                    <a class="btn-phone" href="tel:<?php echo esc_attr(JUNGHEUNG_PHONE_TEL); ?>">
+                        📞 <?php echo esc_html(JUNGHEUNG_PHONE); ?> · 전화 문의
+                    </a>
+                    <a class="btn-ghost" href="<?php echo esc_url(JUNGHEUNG_MAIN_SITE); ?>" rel="noopener">
+                        <?php echo esc_html(JUNGHEUNG_MAIN_SITE_LABEL); ?>
+                    </a>
+                </p>
+                <p class="hero-stars">★ 정통 복싱 ★ 복싱 다이어트 ★ 학생반 ★ 직장인반 ★</p>
+            </div>
+            <?php if (file_exists($character_path)) : ?>
+                <div class="hero-mascot">
+                    <img src="<?php echo esc_url($character_url); ?>" alt="중흥복싱클럽 마스코트" loading="lazy">
+                </div>
+            <?php endif; ?>
         </section>
 
         <div class="split-section">

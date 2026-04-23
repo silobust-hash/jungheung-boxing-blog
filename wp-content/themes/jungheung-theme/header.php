@@ -15,18 +15,28 @@
         <div class="header-inner">
             <div class="logo-container">
                 <?php
-                $logo_path = get_template_directory() . '/assets/images/character.png';
-                $logo_url  = get_template_directory_uri() . '/assets/images/character.png';
+                $brand_path     = get_template_directory() . '/assets/images/logo.png';
+                $brand_url      = get_template_directory_uri() . '/assets/images/logo.png';
+                $character_path = get_template_directory() . '/assets/images/character.png';
+                $character_url  = get_template_directory_uri() . '/assets/images/character.png';
                 ?>
                 <a class="logo-link" href="<?php echo esc_url(home_url('/')); ?>">
                     <?php if (has_custom_logo()) : the_custom_logo(); ?>
-                    <?php elseif (file_exists($logo_path)) : ?>
-                        <img src="<?php echo esc_url($logo_url); ?>" alt="<?php bloginfo('name'); ?>" class="character-logo">
+                    <?php elseif (file_exists($brand_path)) : ?>
+                        <img src="<?php echo esc_url($brand_url); ?>" alt="<?php echo esc_attr(JUNGHEUNG_EN_NAME); ?>" class="brand-logo">
+                    <?php elseif (file_exists($character_path)) : ?>
+                        <img src="<?php echo esc_url($character_url); ?>" alt="<?php bloginfo('name'); ?>" class="character-logo">
+                        <span class="site-title-group">
+                            <span class="site-title-text"><?php bloginfo('name'); ?></span>
+                            <span class="site-title-sub"><?php echo esc_html(JUNGHEUNG_EN_NAME); ?> · BLOG</span>
+                        </span>
+                    <?php else : ?>
+                        <span class="site-title-group">
+                            <span class="site-title-text"><?php bloginfo('name'); ?></span>
+                            <span class="site-title-sub"><?php echo esc_html(JUNGHEUNG_EN_NAME); ?> · BLOG</span>
+                        </span>
                     <?php endif; ?>
-                    <span class="site-title-group">
-                        <span class="site-title-text"><?php bloginfo('name'); ?></span>
-                        <span class="site-title-sub"><?php echo esc_html(JUNGHEUNG_EN_NAME); ?> · BLOG</span>
-                    </span>
+                    <span class="blog-badge">BLOG</span>
                 </a>
             </div>
 
