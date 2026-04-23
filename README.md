@@ -41,7 +41,7 @@ cd jungheung-boxing-blog
 ### 2-1. Cloudflare 가입 & 도메인 추가
 1. https://dash.cloudflare.com 가입 (무료 플랜)
 2. **Add a site** → `광주복싱.com` 입력
-   - Cloudflare 가 자동으로 퓨니코드 `xn--oy2b35ckwh3a.com` 로 변환함
+   - Cloudflare 가 자동으로 퓨니코드 `xn--hc0bj51alpe00g.com` 로 변환함
 3. Free 플랜 선택 → Continue
 4. Cloudflare 가 기존 가비아 DNS 레코드를 자동 스캔함
 
@@ -66,7 +66,7 @@ cd jungheung-boxing-blog
 
 확인:
 ```bash
-dig NS xn--oy2b35ckwh3a.com +short
+dig NS xn--hc0bj51alpe00g.com +short
 # kia.ns.cloudflare.com.
 # walt.ns.cloudflare.com.
 ```
@@ -90,7 +90,7 @@ dig NS xn--oy2b35ckwh3a.com +short
 | 항목              | 값                        |
 |-------------------|---------------------------|
 | Subdomain         | `blog`                    |
-| Domain            | `xn--oy2b35ckwh3a.com`    |
+| Domain            | `xn--hc0bj51alpe00g.com`    |
 | Path              | (비움)                    |
 | Service - Type    | `HTTP`                    |
 | Service - URL     | `wordpress:80`            |
@@ -112,7 +112,7 @@ cp .env.example .env
 openssl rand -base64 32
 ```
 
-- `BLOG_DOMAIN` = `blog.xn--oy2b35ckwh3a.com`
+- `BLOG_DOMAIN` = `blog.xn--hc0bj51alpe00g.com`
 - `MYSQL_ROOT_PASSWORD`, `MYSQL_PASSWORD` = 위에서 생성한 값
 - `CLOUDFLARE_TUNNEL_TOKEN` = 3-1 에서 복사한 토큰
 
