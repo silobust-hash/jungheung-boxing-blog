@@ -23,6 +23,20 @@ wp-content/upgrade/
 wp-content/cache/
 wp-content/languages/
 
+# WP 코어가 자동 설치하는 기본 테마 (업데이트마다 새 버전 생김 — 추적 불필요)
+wp-content/themes/twentytwentythree/
+wp-content/themes/twentytwentyfour/
+wp-content/themes/twentytwentyfive/
+wp-content/themes/twentytwentysix/
+
+# WP 빈 인덱스 플레이스홀더 (보안용 — WP 가 자동 생성)
+wp-content/index.php
+wp-content/themes/index.php
+wp-content/plugins/index.php
+
+# 배포·크론 로그
+logs/
+
 # macOS
 .DS_Store
 

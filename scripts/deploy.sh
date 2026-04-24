@@ -37,8 +37,25 @@ fi
 log "업데이트 발견: $LOCAL → $REMOTE"
 CHANGED_FILES=$(git diff --name-only "$LOCAL" "$REMOTE")
 
-git merge --ff-only "origin/$CURRENT_BRANCH"
-log "git pull 완료"
+# 작업트리가 더러우면 fast-forward 가 막히므로, 중요 파일(보안·mu-plugin)만이라도
+# origin/main 버전으로 선제 복원한 뒤 전체 merge 시도.
+# 테마 파일(header/index 등)은 운영 중 수동 편집됐을 수 있어 건드리지 않음.
+if ! git diff --quiet || ! git diff --cached --quiet; then
+    log "⚠ 작업 트리에 로컬 수정 있음 — 보안 파일만 선제 복원"
+    for critical in wp-content/mu-plugins/jungheung-defaults.php .gitignore; do
+        if echo "$CHANGED_FILES" | grep -qx "$critical"; then
+            git restore --source "origin/$CURRENT_BRANCH" -- "$critical" && \
+                log "  ✓ 복원: $critical"
+        fi
+    done
+fi
+
+if git merge --ff-only "origin/$CURRENT_BRANCH" 2>/dev/null; then
+    log "git pull 완료 (fast-forward)"
+else
+    log "⚠ fast-forward 불가 (로컬 커밋 분기 또는 수정 존재). 위에서 보안 파일은 복원됨."
+    log "  로컬 상태를 원하면 수동으로 정리하세요: git status"
+fi
 
 RESTART_ALL=0
 RESTART_WP=0
