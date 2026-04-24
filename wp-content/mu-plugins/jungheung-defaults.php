@@ -2,12 +2,19 @@
 /**
  * Plugin Name: Jungheung Site Defaults
  * Description: 사이트 기본 설정(한국 시간대, 고유주소, 보안 강화 등)을 자동 적용합니다. mu-plugin 이라 비활성화 불가.
- * Version: 1.0.0
+ * Version: 1.0.1
  * Author: Antigravity
  */
 
 if (!defined('ABSPATH')) {
     exit;
+}
+
+// XML-RPC 엔드포인트 자체를 차단합니다. Cloudflare WAF 와 함께 쓰면 더 좋습니다.
+if (defined('XMLRPC_REQUEST') && XMLRPC_REQUEST) {
+    http_response_code(403);
+    header('Content-Type: text/plain; charset=utf-8');
+    exit('XML-RPC disabled.');
 }
 
 /**
@@ -16,7 +23,7 @@ if (!defined('ABSPATH')) {
  */
 add_action('init', function () {
     $installed = get_option('jungheung_defaults_version');
-    $target    = '1.0.0';
+    $target    = '1.0.1';
     if ($installed === $target) {
         return;
     }
@@ -79,12 +86,41 @@ add_action('init', function () {
     flush_rewrite_rules(false);
 }, 20);
 
+// WXR 가져오기 후 복싱 글에 같이 붙은 기본 카테고리(미분류)를 제거합니다.
+add_action('init', function () {
+    if (get_option('jungheung_uncategorized_cleaned') === '1') {
+        return;
+    }
+
+    $default_category_id = (int) get_option('default_category');
+    $boxing_category = get_term_by('slug', 'jungheung-boxing-story', 'category');
+    if (!$default_category_id || !$boxing_category || is_wp_error($boxing_category)) {
+        return;
+    }
+
+    $post_ids = get_posts(array(
+        'post_type'      => 'post',
+        'post_status'    => 'any',
+        'fields'         => 'ids',
+        'posts_per_page' => -1,
+        'category__and'  => array($default_category_id, (int) $boxing_category->term_id),
+    ));
+
+    foreach ($post_ids as $post_id) {
+        wp_remove_object_terms((int) $post_id, $default_category_id, 'category');
+    }
+
+    update_option('jungheung_uncategorized_cleaned', '1');
+}, 30);
+
 // XML-RPC 비활성화 (로그인 무차별 대입 공격 경로 차단)
 add_filter('xmlrpc_enabled', '__return_false');
 add_filter('wp_headers', function ($headers) {
     unset($headers['X-Pingback']);
     return $headers;
 });
+remove_action('wp_head', 'rsd_link');
+remove_action('wp_head', 'wlwmanifest_link');
 
 // WP 버전 노출 제거
 remove_action('wp_head', 'wp_generator');
@@ -116,7 +152,9 @@ add_filter('wp_sitemaps_add_provider', function ($provider, $name) {
 add_filter('robots_txt', function ($output, $public) {
     if ((int) $public === 1) {
         $sitemap_url = home_url('/wp-sitemap.xml');
-        $output .= "\nSitemap: $sitemap_url\n";
+        if (strpos($output, "Sitemap: $sitemap_url") === false) {
+            $output .= "\nSitemap: $sitemap_url\n";
+        }
     }
     return $output;
 }, 10, 2);

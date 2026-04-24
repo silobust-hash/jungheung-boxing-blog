@@ -5,9 +5,15 @@
 
 # 백업 산출물
 backups/
+logs/
 *.sql
 *.sql.gz
 *.tar.gz
+
+# 로컬 Python 환경
+.venv/
+venv/
+__pycache__/
 
 # WordPress 가 런타임에 생성/설치하는 디렉터리
 # (DB, 업로드, 플러그인은 git 이 아니라 백업 스크립트로 관리합니다)
