@@ -51,11 +51,18 @@
                         'fallback_cb'    => false,
                     ));
                 } else {
+                    $boxing_term = get_term_by('slug', 'jungheung-boxing-story', 'category');
+                    $adjuster_term = get_term_by('slug', 'adjuster-story', 'category');
+                    if (!$adjuster_term) {
+                        $adjuster_term = get_term_by('slug', 'adjuster', 'category');
+                    }
                     echo '<ul class="menu-primary">';
                     printf('<li><a href="%s">홈</a></li>', esc_url(home_url('/')));
-                    $adjuster_term = get_term_by('slug', 'adjuster', 'category');
+                    if ($boxing_term) {
+                        printf('<li><a href="%s">🥊 복싱 이야기</a></li>', esc_url(get_category_link($boxing_term)));
+                    }
                     if ($adjuster_term) {
-                        printf('<li><a href="%s">📋 손해사정</a></li>', esc_url(get_category_link($adjuster_term)));
+                        printf('<li><a href="%s">📋 손해사정사</a></li>', esc_url(get_category_link($adjuster_term)));
                     }
                     printf('<li class="menu-external"><a href="%s" rel="noopener">%s</a></li>',
                         esc_url(JUNGHEUNG_MAIN_SITE),

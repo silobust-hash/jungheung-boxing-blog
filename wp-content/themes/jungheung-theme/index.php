@@ -63,19 +63,32 @@
         </section>
 
         <?php
-        $adjuster_term = get_term_by('slug', 'adjuster', 'category');
-        $adjuster_id   = $adjuster_term ? (int) $adjuster_term->term_id : 0;
+        $boxing_term = get_term_by('slug', 'jungheung-boxing-story', 'category');
+        $adjuster_term = get_term_by('slug', 'adjuster-story', 'category');
+        if (!$adjuster_term) {
+            $adjuster_term = get_term_by('slug', 'adjuster', 'category');
+        }
         ?>
         <div class="split-section">
             <section class="category-card boxing">
                 <h3>🥊 중흥복싱클럽 이야기</h3>
                 <?php
-                $boxing_query = new WP_Query(array(
-                    'post_type'           => 'post',
-                    'posts_per_page'      => 5,
-                    'category__not_in'    => $adjuster_id ? array($adjuster_id) : array(),
-                    'ignore_sticky_posts' => true,
-                ));
+                if ($boxing_term) :
+                    $boxing_query = new WP_Query(array(
+                        'post_type'           => 'post',
+                        'posts_per_page'      => 5,
+                        'cat'                 => (int) $boxing_term->term_id,
+                        'ignore_sticky_posts' => true,
+                    ));
+                else :
+                    // 폴백: 손해사정 외 모든 글
+                    $boxing_query = new WP_Query(array(
+                        'post_type'           => 'post',
+                        'posts_per_page'      => 5,
+                        'category__not_in'    => $adjuster_term ? array((int) $adjuster_term->term_id) : array(),
+                        'ignore_sticky_posts' => true,
+                    ));
+                endif;
                 if ($boxing_query->have_posts()) :
                     while ($boxing_query->have_posts()) : $boxing_query->the_post(); ?>
                         <div class="post-item">
@@ -84,6 +97,9 @@
                         </div>
                     <?php endwhile;
                     wp_reset_postdata();
+                    if ($boxing_term) :
+                        printf('<a class="card-more" href="%s">더 보기 →</a>', esc_url(get_category_link($boxing_term)));
+                    endif;
                 else :
                     echo '<p class="no-posts">아직 등록된 글이 없습니다.</p>';
                 endif;
@@ -91,13 +107,13 @@
             </section>
 
             <section class="category-card adjuster">
-                <h3>📋 손해사정사 업무</h3>
+                <h3>📋 손해사정사 이야기</h3>
                 <?php
-                if ($adjuster_id) :
+                if ($adjuster_term) :
                     $adjuster_query = new WP_Query(array(
                         'post_type'           => 'post',
                         'posts_per_page'      => 5,
-                        'cat'                 => $adjuster_id,
+                        'cat'                 => (int) $adjuster_term->term_id,
                         'ignore_sticky_posts' => true,
                     ));
                     if ($adjuster_query->have_posts()) :
@@ -108,12 +124,12 @@
                             </div>
                         <?php endwhile;
                         wp_reset_postdata();
-                        printf('<a class="card-more" href="%s">더 보기 →</a>', esc_url(get_category_link($adjuster_id)));
+                        printf('<a class="card-more" href="%s">더 보기 →</a>', esc_url(get_category_link($adjuster_term)));
                     else :
                         echo '<p class="no-posts">아직 등록된 글이 없습니다.</p>';
                     endif;
                 else :
-                    echo '<p class="no-posts">카테고리가 준비되지 않았습니다. <code>./scripts/seed.sh</code> 실행 후 다시 확인하세요.</p>';
+                    echo '<p class="no-posts">카테고리가 준비되지 않았습니다. 관리자에서 "손해사정" 또는 "손해사정사 이야기" 카테고리를 만드세요.</p>';
                 endif;
                 ?>
             </section>
